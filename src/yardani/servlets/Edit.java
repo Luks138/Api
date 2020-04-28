@@ -30,13 +30,13 @@ public class Edit extends HttpServlet {
         if(firstname != null) {
             editUser(id, "firstname", firstname);
         }
-        else if(lastname != null) {
+        if(lastname != null) {
             editUser(id, "lastname", lastname);
         }
-        else if(country != null) {
+        if(country != null) {
             editUser(id, "country", country);
         }
-        else if(city != null) {
+        if(city != null) {
             editUser(id, "city", city);
         }
         resp.sendRedirect("/api");

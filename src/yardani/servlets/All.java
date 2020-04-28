@@ -93,14 +93,14 @@ public class All extends HttpServlet {
                 this.id = rs.getString("id");
                 firstName = rs.getString("firstname");
                 lastName = rs.getString("lastname");
-                city = rs.getString("city");
                 country = rs.getString("country");
+                city = rs.getString("city");
 
                 userInfo[0] = this.id;
                 userInfo[1] = firstName;
                 userInfo[2] = lastName;
-                userInfo[3] = city;
-                userInfo[4] = country;
+                userInfo[3] = country;
+                userInfo[4] = city;
             }
         } catch (SQLException e) {
             System.out.println("Can't get info\n" + e);
