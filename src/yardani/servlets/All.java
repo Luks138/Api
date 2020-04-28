@@ -3,6 +3,7 @@ package yardani.servlets;
 import com.google.gson.Gson;
 import yardani.Config;
 import yardani.controllers.NetworkController;
+import yardani.templates.ErrorMessageEntity;
 import yardani.templates.MessageEntity;
 
 import javax.servlet.ServletException;
@@ -31,14 +32,20 @@ public class All extends HttpServlet {
         Gson gson = new Gson();
         ArrayList<MessageEntity> data = new ArrayList<>();
         idList = getIds();
-        for(String i : idList) {
-            String[] userInfo = new String[5];
-            userInfo = getInfo(i);
-            MessageEntity message = new MessageEntity(userInfo[0], userInfo[1], userInfo[2], userInfo[3], userInfo[4]);
-            data.add(message);
+        if(idList.size() == 0) {
+            ErrorMessageEntity errorMessage = new ErrorMessageEntity("No users found");
+            String jsonMessage = gson.toJson(errorMessage);
+            resp.getWriter().write(jsonMessage);
+        } else {
+            for(String i : idList) {
+                String[] userInfo = new String[5];
+                userInfo = getInfo(i);
+                MessageEntity message = new MessageEntity(userInfo[0], userInfo[1], userInfo[2], userInfo[3], userInfo[4]);
+                data.add(message);
+            }
+            String jsonMessage = gson.toJson(data);
+            resp.getWriter().write(jsonMessage);
         }
-        String jsonMessage = gson.toJson(data);
-        resp.getWriter().write(jsonMessage);
     }
 
     @Override

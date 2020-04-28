@@ -8,9 +8,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
-    <title>$Title$</title>
+    <title>Api</title>
   </head>
   <body>
-  $END$
+    <h1><a href="/api" style="text-decoration: none;">To api</a></h1>
+    <h1><a href="/docs.jsp" style="text-decoration: none">Documentation</a></h1>
   </body>
 </html>

@@ -3,6 +3,7 @@ package yardani.servlets;
 import com.google.gson.Gson;
 import yardani.Config;
 import yardani.controllers.NetworkController;
+import yardani.templates.ErrorMessageEntity;
 import yardani.templates.MessageEntity;
 
 import javax.servlet.ServletException;
@@ -38,7 +39,9 @@ public class Api extends HttpServlet {
                 String jsonMessage = gson.toJson(message);
                 resp.getWriter().write(jsonMessage);
             } else {
-                resp.getWriter().write("User doesn't exist!");
+                ErrorMessageEntity errorMessage = new ErrorMessageEntity("User doesn't exist");
+                String jsonMessage = gson.toJson(errorMessage);
+                resp.getWriter().write(jsonMessage);
             }
         }
     }
