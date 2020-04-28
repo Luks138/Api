@@ -1,7 +1,9 @@
-{
+[
+		{
             "id":"1",
             "firstname": "Yaroslav",
             "lastname": "Golomidov",
             "country": "Russia",
             "city": "Krasnoyarsk"
-}
+		}
+]
