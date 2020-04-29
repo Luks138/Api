@@ -27,6 +27,9 @@ public class Edit extends HttpServlet {
         String lastname = req.getParameter("lastname");
         String country = req.getParameter("country");
         String city = req.getParameter("city");
+        String street = req.getParameter("street");
+        String houseNum = req.getParameter("housenum");
+        String email = req.getParameter("email");
         if(firstname != null) {
             editUser(id, "firstname", firstname);
         }
@@ -38,6 +41,15 @@ public class Edit extends HttpServlet {
         }
         if(city != null) {
             editUser(id, "city", city);
+        }
+        if(street != null) {
+            editUser(id, "street", street);
+        }
+        if(houseNum != null) {
+            editUser(id, "housenum", houseNum);
+        }
+        if(email != null) {
+            editUser(id, "email", email);
         }
         resp.sendRedirect("/api");
         return;
