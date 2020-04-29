@@ -25,6 +25,9 @@ public class All extends HttpServlet {
     private String lastName;
     private String country;
     private String city;
+    private String street;
+    private String houseNum;
+    private String email;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,9 +41,10 @@ public class All extends HttpServlet {
             resp.getWriter().write(jsonMessage);
         } else {
             for(String i : idList) {
-                String[] userInfo = new String[5];
+                String[] userInfo = new String[8];
                 userInfo = getInfo(i);
-                MessageEntity message = new MessageEntity(userInfo[0], userInfo[1], userInfo[2], userInfo[3], userInfo[4]);
+                MessageEntity address = new MessageEntity(userInfo[5], userInfo[6], userInfo[4]);
+                MessageEntity message = new MessageEntity(userInfo[0], userInfo[1], userInfo[2], userInfo[3], userInfo[7], address);
                 data.add(message);
             }
             String jsonMessage = gson.toJson(data);
@@ -83,7 +87,7 @@ public class All extends HttpServlet {
         NetworkController networkController = new NetworkController();
         Statement statement = null;
         ResultSet rs = null;
-        String[] userInfo = new String[5];
+        String[] userInfo = new String[8];
         networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         String query = "SELECT * FROM api_table WHERE id = " + id;
         try {
@@ -95,12 +99,18 @@ public class All extends HttpServlet {
                 lastName = rs.getString("lastname");
                 country = rs.getString("country");
                 city = rs.getString("city");
+                street = rs.getString("street");
+                houseNum = rs.getString("housenum");
+                email = rs.getString("email");
 
                 userInfo[0] = this.id;
                 userInfo[1] = firstName;
                 userInfo[2] = lastName;
                 userInfo[3] = country;
                 userInfo[4] = city;
+                userInfo[5] = street;
+                userInfo[6] = houseNum;
+                userInfo[7] = email;
             }
         } catch (SQLException e) {
             System.out.println("Can't get info\n" + e);

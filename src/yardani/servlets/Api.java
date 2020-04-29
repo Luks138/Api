@@ -24,6 +24,9 @@ public class Api extends HttpServlet {
     private String lastName;
     private String country;
     private String city;
+    private String street;
+    private String houseNum;
+    private String email;
 
     public String getId() {
         return id;
@@ -35,7 +38,8 @@ public class Api extends HttpServlet {
         String id = req.getParameter("id");
         if(id != null) {
             if(getInfo(id)) {
-                MessageEntity message = new MessageEntity(this.id, firstName, lastName, country, city);
+                MessageEntity address = new MessageEntity(street, houseNum, city);
+                MessageEntity message = new MessageEntity(this.id, firstName, lastName, country, email, address);
                 String jsonMessage = gson.toJson(message);
                 resp.getWriter().write(jsonMessage);
             } else {
@@ -73,6 +77,9 @@ public class Api extends HttpServlet {
                     lastName = rs.getString("lastname");
                     country = rs.getString("country");
                     city = rs.getString("city");
+                    street = rs.getString("street");
+                    houseNum = rs.getString("housenum");
+                    email = rs.getString("email");
                     isGotten = true;
                 }
             }

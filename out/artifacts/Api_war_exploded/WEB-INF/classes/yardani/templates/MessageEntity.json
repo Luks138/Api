@@ -1,7 +1,14 @@
-{
+[
+		{
             "id":"1",
             "firstname": "Yaroslav",
             "lastname": "Golomidov",
             "country": "Russia",
-            "city": "Krasnoyarsk"
-}
+            "email": "golomidowyar@gmail.com",
+            "address": {
+                "city": "Krasnoyarsk",
+                "street": "Dubov",
+                "houseNum": "1"
+            }
+		}
+]
