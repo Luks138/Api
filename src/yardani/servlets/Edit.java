@@ -1,7 +1,9 @@
 package yardani.servlets;
 
+import com.google.gson.Gson;
 import yardani.Config;
 import yardani.controllers.NetworkController;
+import yardani.templates.ErrorMessageEntity;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,10 +21,6 @@ public class Edit extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
-        if(id == null) {
-            resp.sendRedirect("/api");
-            return;
-        }
         String firstname = req.getParameter("firstname");
         String lastname = req.getParameter("lastname");
         String country = req.getParameter("country");
@@ -30,6 +28,15 @@ public class Edit extends HttpServlet {
         String street = req.getParameter("street");
         String houseNum = req.getParameter("housenum");
         String email = req.getParameter("email");
+
+        if(id == null || (firstname == null && lastname == null && country == null && city == null && street == null && houseNum == null && email == null)) {
+            Gson gson = new Gson();
+            ErrorMessageEntity errorMessage = new ErrorMessageEntity("Id or other value not specified.", 1);
+            String jsonMessage = gson.toJson(errorMessage);
+            resp.getWriter().write(jsonMessage);
+            return;
+        }
+
         if(firstname != null) {
             editUser(id, "firstname", firstname);
         }

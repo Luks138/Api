@@ -36,7 +36,7 @@ public class All extends HttpServlet {
         ArrayList<MessageEntity> data = new ArrayList<>();
         idList = getIds();
         if(idList.size() == 0) {
-            ErrorMessageEntity errorMessage = new ErrorMessageEntity("No users found");
+            ErrorMessageEntity errorMessage = new ErrorMessageEntity("No users found", 5);
             String jsonMessage = gson.toJson(errorMessage);
             resp.getWriter().write(jsonMessage);
         } else {

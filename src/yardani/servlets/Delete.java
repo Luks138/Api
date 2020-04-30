@@ -1,7 +1,9 @@
 package yardani.servlets;
 
+import com.google.gson.Gson;
 import yardani.Config;
 import yardani.controllers.NetworkController;
+import yardani.templates.ErrorMessageEntity;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,13 +21,20 @@ public class Delete extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
+        Gson gson = new Gson();
         if(id != null) {
-            deleteUser(id);
-            resp.sendRedirect("/api");
-            return;
+            if(deleteUser(id)) {
+                resp.sendRedirect("/api");
+                return;
+            } else {
+                ErrorMessageEntity errorMessage = new ErrorMessageEntity("IOException.", 3);
+                String jsonMessage = gson.toJson(errorMessage);
+                resp.getWriter().write(jsonMessage);
+            }
         } else {
-            resp.sendRedirect("/api");
-            return;
+            ErrorMessageEntity errorMessage = new ErrorMessageEntity("Id not specified.", 1);
+            String jsonMessage = gson.toJson(errorMessage);
+            resp.getWriter().write(jsonMessage);
         }
     }
 
@@ -34,20 +43,23 @@ public class Delete extends HttpServlet {
         doGet(req, resp);
     }
 
-    private void deleteUser(String id) {
+    private boolean deleteUser(String id) {
         NetworkController networkController = new NetworkController();
         Statement statement = null;
         ResultSet rs = null;
+        boolean isDeleted = false;
         networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         String sql = "DELETE FROM api_table WHERE id = " + id;
         try {
             statement = networkController.getConnection().createStatement();
             statement.executeUpdate(sql);
             System.out.println("User deleted!");
+            isDeleted = true;
         } catch (SQLException e) {
             System.out.println("Can't delete user...\n" + e);
         } finally {
             networkController.disconnect(statement, rs);
         }
+        return isDeleted;
     }
 }

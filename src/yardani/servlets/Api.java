@@ -43,7 +43,7 @@ public class Api extends HttpServlet {
                 String jsonMessage = gson.toJson(message);
                 resp.getWriter().write(jsonMessage);
             } else {
-                ErrorMessageEntity errorMessage = new ErrorMessageEntity("User doesn't exist");
+                ErrorMessageEntity errorMessage = new ErrorMessageEntity("User doesn't exist", 4);
                 String jsonMessage = gson.toJson(errorMessage);
                 resp.getWriter().write(jsonMessage);
             }
