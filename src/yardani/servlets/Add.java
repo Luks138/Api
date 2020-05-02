@@ -25,14 +25,18 @@ public class Add extends HttpServlet {
         String lastname = req.getParameter("lastname");
         String country = req.getParameter("country");
         String city = req.getParameter("city");
+        String street = req.getParameter("street");
+        String houseNum = req.getParameter("housenum");
+        String email = req.getParameter("email");
         Gson gson = new Gson();
-        if(id == null || firstname == null || lastname == null || country == null || city == null) {
+        if(id == null || firstname == null || lastname == null || country == null || city == null || street == null || houseNum == null || email == null) {
             ErrorMessageEntity errorMessage = new ErrorMessageEntity("Id or other value not specified.", 1);
             String jsonMessage = gson.toJson(errorMessage);
             resp.getWriter().write(jsonMessage);
         } else {
             if(checkForId(id)) {
-                if(addUser(id, firstname, lastname, country, city)) {
+                if(addUser(id, firstname, lastname, country, city, street, houseNum, email)) {
+                    System.out.println("User added!");
                     resp.sendRedirect("/api?id=" + id);
                     return;
                 }
@@ -73,13 +77,13 @@ public class Add extends HttpServlet {
         return isChecked;
     }
 
-    private boolean addUser(String id, String firstname, String lastname, String country, String city) {
+    private boolean addUser(String id, String firstname, String lastname, String country, String city, String street, String houseNum, String email) {
         NetworkController networkController = new NetworkController();
         Statement statement = null;
         ResultSet rs = null;
         boolean isAdded = false;
         networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
-        String query = "INSERT api_table(id, firstname, lastname, country, city) VALUES ('" + id + "','" + firstname + "','" + lastname + "','" + country + "','" + city + "');";
+        String query = "INSERT api_table(id, firstname, lastname, country, city, street, housenum, email) VALUES ('" + id + "','" + firstname + "','" + lastname + "','" + country + "'" + ",'" + city + "','" + street + "', '" + houseNum + "', '" + email + "');";
         try {
             statement = networkController.getConnection().createStatement();
             statement.executeUpdate(query);
