@@ -37,27 +37,27 @@ public class Edit extends HttpServlet {
             return;
         }
 
-        if(firstname != null) {
+        if(firstname != null)
             editUser(id, "firstname", firstname);
-        }
-        if(lastname != null) {
+
+        if(lastname != null)
             editUser(id, "lastname", lastname);
-        }
-        if(country != null) {
+
+        if(country != null)
             editUser(id, "country", country);
-        }
-        if(city != null) {
+
+        if(city != null)
             editUser(id, "city", city);
-        }
-        if(street != null) {
+
+        if(street != null)
             editUser(id, "street", street);
-        }
-        if(houseNum != null) {
+
+        if(houseNum != null)
             editUser(id, "housenum", houseNum);
-        }
-        if(email != null) {
+
+        if(email != null)
             editUser(id, "email", email);
-        }
+
         resp.sendRedirect("/api");
         return;
     }

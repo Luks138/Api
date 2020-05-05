@@ -28,10 +28,6 @@ public class Api extends HttpServlet {
     private String houseNum;
     private String email;
 
-    public String getId() {
-        return id;
-    }
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Gson gson = new Gson();
