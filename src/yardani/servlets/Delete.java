@@ -27,7 +27,7 @@ public class Delete extends HttpServlet {
                 resp.sendRedirect("/api");
                 return;
             } else {
-                ErrorMessageEntity errorMessage = new ErrorMessageEntity("User wasn't deleted.", 3);
+                ErrorMessageEntity errorMessage = new ErrorMessageEntity("User wasn't deleted.", 6);
                 String jsonMessage = gson.toJson(errorMessage);
                 resp.getWriter().write(jsonMessage);
             }
