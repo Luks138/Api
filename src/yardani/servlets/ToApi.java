@@ -14,9 +14,4 @@ public class ToApi extends HttpServlet {
         resp.sendRedirect("/index.jsp");
         return;
     }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
-    }
 }

@@ -46,16 +46,6 @@ public class Api extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
-    }
-
-    @Override
-    public void init() throws ServletException {
-        System.out.println("Init");
-    }
-
     private boolean getInfo(String id) {
         NetworkController networkController = new NetworkController();
         Statement statement = null;

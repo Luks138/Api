@@ -48,11 +48,6 @@ public class Add extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
-    }
-
     private boolean checkForId(String id) {
         NetworkController networkController = new NetworkController();
         Statement statement = null;

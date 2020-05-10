@@ -62,11 +62,6 @@ public class Edit extends HttpServlet {
         return;
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
-    }
-
     private void editUser(String id, String param, String value) {
         NetworkController networkController = new NetworkController();
         Statement statement = null;

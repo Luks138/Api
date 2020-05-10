@@ -38,11 +38,6 @@ public class Delete extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
-    }
-
     private boolean deleteUser(String id) {
         NetworkController networkController = new NetworkController();
         Statement statement = null;

@@ -52,16 +52,6 @@ public class All extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
-    }
-
-    @Override
-    public void init() throws ServletException {
-        System.out.println("Init");
-    }
-
     private ArrayList<String> getIds() {
         ArrayList<String> idList = new ArrayList<>();
         NetworkController networkController = new NetworkController();
