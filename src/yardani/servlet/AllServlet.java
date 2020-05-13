@@ -3,8 +3,8 @@ package yardani.servlet;
 import com.google.gson.Gson;
 import yardani.config.Config;
 import yardani.controller.NetworkController;
-import yardani.domain.ErrorMessageEntity;
-import yardani.domain.MessageEntity;
+import yardani.domain.ErrorMessage;
+import yardani.domain.Message;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,18 +33,18 @@ public class AllServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ArrayList<String> idList = new ArrayList<>();
         Gson gson = new Gson();
-        ArrayList<MessageEntity> data = new ArrayList<>();
+        ArrayList<Message> data = new ArrayList<>();
         idList = getIds();
         if(idList.size() == 0) {
-            ErrorMessageEntity errorMessage = new ErrorMessageEntity("No users found.", 5);
+            ErrorMessage errorMessage = new ErrorMessage("No users found.", 5);
             String jsonMessage = gson.toJson(errorMessage);
             resp.getWriter().write(jsonMessage);
         } else {
             for(String i : idList) {
                 String[] userInfo = new String[8];
                 userInfo = getInfo(i);
-                MessageEntity address = new MessageEntity(userInfo[5], userInfo[6], userInfo[4]);
-                MessageEntity message = new MessageEntity(userInfo[0], userInfo[1], userInfo[2], userInfo[3], userInfo[7], address);
+                Message address = new Message(userInfo[5], userInfo[6], userInfo[4]);
+                Message message = new Message(userInfo[0], userInfo[1], userInfo[2], userInfo[3], userInfo[7], address);
                 data.add(message);
             }
             String jsonMessage = gson.toJson(data);

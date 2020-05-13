@@ -3,7 +3,7 @@ package yardani.servlet;
 import com.google.gson.Gson;
 import yardani.config.Config;
 import yardani.controller.NetworkController;
-import yardani.domain.ErrorMessageEntity;
+import yardani.domain.ErrorMessage;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,7 +30,7 @@ public class AddServlet extends HttpServlet {
         String email = req.getParameter("email");
         Gson gson = new Gson();
         if(id == null || firstname == null || lastname == null || country == null || city == null || street == null || houseNum == null || email == null) {
-            ErrorMessageEntity errorMessage = new ErrorMessageEntity("Id or other value not specified.", 1);
+            ErrorMessage errorMessage = new ErrorMessage("Id or other value not specified.", 1);
             String jsonMessage = gson.toJson(errorMessage);
             resp.getWriter().write(jsonMessage);
         } else {
@@ -41,7 +41,7 @@ public class AddServlet extends HttpServlet {
                     return;
                 }
             } else {
-                ErrorMessageEntity errorMessage = new ErrorMessageEntity("Id is already in use.", 2);
+                ErrorMessage errorMessage = new ErrorMessage("Id is already in use.", 2);
                 String jsonMessage = gson.toJson(errorMessage);
                 resp.getWriter().write(jsonMessage);
             }

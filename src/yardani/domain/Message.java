@@ -1,6 +1,6 @@
 package yardani.domain;
 
-public class MessageEntity {
+public class Message {
 
     private String id;
     private String firstName;
@@ -10,9 +10,9 @@ public class MessageEntity {
     private String street;
     private String houseNum;
     private String email;
-    private MessageEntity address;
+    private Message address;
 
-    public MessageEntity(String id, String firstName, String lastName, String country, String email, MessageEntity address) {
+    public Message(String id, String firstName, String lastName, String country, String email, Message address) {
         setId(id);
         setFirstName(firstName);
         setLastName(lastName);
@@ -21,7 +21,7 @@ public class MessageEntity {
         setAddress(address);
     }
 
-    public MessageEntity(String street, String houseNum, String city) {
+    public Message(String street, String houseNum, String city) {
         setStreet(street);
         setHouseNum(houseNum);
         setCity(city);
@@ -59,7 +59,7 @@ public class MessageEntity {
         this.email = email;
     }
 
-    public void setAddress(MessageEntity address) {
+    public void setAddress(Message address) {
         this.address = address;
     }
 }

@@ -3,8 +3,8 @@ package yardani.servlet;
 import com.google.gson.Gson;
 import yardani.config.Config;
 import yardani.controller.NetworkController;
-import yardani.domain.ErrorMessageEntity;
-import yardani.domain.MessageEntity;
+import yardani.domain.ErrorMessage;
+import yardani.domain.Message;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,12 +34,12 @@ public class ApiServlet extends HttpServlet {
         String id = req.getParameter("id");
         if(id != null) {
             if(getInfo(id)) {
-                MessageEntity address = new MessageEntity(street, houseNum, city);
-                MessageEntity message = new MessageEntity(this.id, firstName, lastName, country, email, address);
+                Message address = new Message(street, houseNum, city);
+                Message message = new Message(this.id, firstName, lastName, country, email, address);
                 String jsonMessage = gson.toJson(message);
                 resp.getWriter().write(jsonMessage);
             } else {
-                ErrorMessageEntity errorMessage = new ErrorMessageEntity("User doesn't exist.", 4);
+                ErrorMessage errorMessage = new ErrorMessage("User doesn't exist.", 4);
                 String jsonMessage = gson.toJson(errorMessage);
                 resp.getWriter().write(jsonMessage);
             }

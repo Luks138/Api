@@ -3,7 +3,7 @@ package yardani.servlet;
 import com.google.gson.Gson;
 import yardani.config.Config;
 import yardani.controller.NetworkController;
-import yardani.domain.ErrorMessageEntity;
+import yardani.domain.ErrorMessage;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,12 +27,12 @@ public class DeleteServlet extends HttpServlet {
                 resp.sendRedirect("/api");
                 return;
             } else {
-                ErrorMessageEntity errorMessage = new ErrorMessageEntity("User wasn't deleted.", 6);
+                ErrorMessage errorMessage = new ErrorMessage("User wasn't deleted.", 6);
                 String jsonMessage = gson.toJson(errorMessage);
                 resp.getWriter().write(jsonMessage);
             }
         } else {
-            ErrorMessageEntity errorMessage = new ErrorMessageEntity("Id not specified.", 1);
+            ErrorMessage errorMessage = new ErrorMessage("Id not specified.", 1);
             String jsonMessage = gson.toJson(errorMessage);
             resp.getWriter().write(jsonMessage);
         }

@@ -1,11 +1,11 @@
 package yardani.domain;
 
-public class ErrorMessageEntity {
+public class ErrorMessage {
 
     private String errorMessage;
     private int errorCode;
 
-    public ErrorMessageEntity(String errorMessage, int errorCode) {
+    public ErrorMessage(String errorMessage, int errorCode) {
         setErrorMessage(errorMessage);
         setErrorCode(errorCode);
     }
