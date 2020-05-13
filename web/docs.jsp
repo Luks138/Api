@@ -20,7 +20,7 @@
                 <li>
                     <a href="#add">
                         /add
-                        <span class="endpoint post"></span>
+                        <span class="endpoint get"></span>
                     </a>
                 </li>
                 <li>
@@ -152,7 +152,7 @@
             <h3>
                 <a id="add">
                     /add
-                    <span class="endpoint post"></span>
+                    <span class="endpoint get"></span>
                 </a>
             </h3>
             <p class="description">Add user to DB</p>
