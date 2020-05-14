@@ -1,6 +1,5 @@
 package yardani.controller;
 
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
@@ -9,9 +8,9 @@ import java.sql.SQLException;
 
 public class NetworkController {
 
-    private static Connection connection = null;
-    private static Statement statement = null;
-    private static ResultSet resultSet = null;
+    private Connection connection = null;
+    private Statement statement = null;
+    private ResultSet resultSet = null;
 
     public Connection getConnection() {
         return connection;
@@ -24,7 +23,6 @@ public class NetworkController {
             System.out.println("Connected...");
         } catch(Exception e) {
             System.out.println("Connection failed...\n" + e);
-            JOptionPane.showMessageDialog(null, "Failed to connect to data base");
             disconnect(statement, resultSet);
         }
     }
