@@ -20,7 +20,6 @@ public class NetworkController {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             connection = DriverManager.getConnection(url, username, password);
-            System.out.println("Connected...");
         } catch(Exception e) {
             System.out.println("Connection failed...\n" + e);
             disconnect(statement, resultSet);
@@ -35,7 +34,6 @@ public class NetworkController {
                 connection.close();
             if(resultSet != null)
                 resultSet.close();
-            System.out.println("Connection closed...");
         } catch (SQLException e) {
             System.out.println("Can't close connection...\n" + e);
         }

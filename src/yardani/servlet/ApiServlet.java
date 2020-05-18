@@ -5,6 +5,7 @@ import yardani.config.Config;
 import yardani.controller.NetworkController;
 import yardani.domain.ErrorMessage;
 import yardani.domain.Message;
+import yardani.security.Crypto;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,11 +32,12 @@ public class ApiServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Gson gson = new Gson();
+        Crypto crypto = new Crypto();
         String id = req.getParameter("id");
         if(id != null) {
             if(getInfo(id)) {
-                Message address = new Message(street, houseNum, city);
-                Message message = new Message(this.id, firstName, lastName, country, email, address);
+                Message address = new Message(new String(crypto.decrypt(street.getBytes())), new String(crypto.decrypt(houseNum.getBytes())), new String(crypto.decrypt(city.getBytes())));
+                Message message = new Message(this.id, new String(crypto.decrypt(firstName.getBytes())), new String(crypto.decrypt(lastName.getBytes())), new String(crypto.decrypt(country.getBytes())), new String(crypto.decrypt(email.getBytes())), address);
                 String jsonMessage = gson.toJson(message);
                 resp.getWriter().write(jsonMessage);
             } else {

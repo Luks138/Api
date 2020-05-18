@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import yardani.config.Config;
 import yardani.controller.NetworkController;
 import yardani.domain.ErrorMessage;
+import yardani.security.Crypto;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,26 +38,28 @@ public class EditServlet extends HttpServlet {
             return;
         }
 
+        Crypto crypto = new Crypto();
+
         if(firstname != null)
-            editUser(id, "firstname", firstname);
+            editUser(id, "firstname", new String(crypto.encrypt(firstname.getBytes())));
 
         if(lastname != null)
-            editUser(id, "lastname", lastname);
+            editUser(id, "lastname", new String(crypto.encrypt(lastname.getBytes())));
 
         if(country != null)
-            editUser(id, "country", country);
+            editUser(id, "country", new String(crypto.encrypt(country.getBytes())));
 
         if(city != null)
-            editUser(id, "city", city);
+            editUser(id, "city", new String(crypto.encrypt(city.getBytes())));
 
         if(street != null)
-            editUser(id, "street", street);
+            editUser(id, "street", new String(crypto.encrypt(street.getBytes())));
 
         if(houseNum != null)
-            editUser(id, "housenum", houseNum);
+            editUser(id, "housenum", new String(crypto.encrypt(houseNum.getBytes())));
 
         if(email != null)
-            editUser(id, "email", email);
+            editUser(id, "email", new String(crypto.encrypt(email.getBytes())));
 
         resp.sendRedirect("/api");
         return;

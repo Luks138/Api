@@ -5,6 +5,7 @@ import yardani.config.Config;
 import yardani.controller.NetworkController;
 import yardani.domain.ErrorMessage;
 import yardani.domain.Message;
+import yardani.security.Crypto;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,6 +35,7 @@ public class AllServlet extends HttpServlet {
         ArrayList<String> idList = new ArrayList<>();
         Gson gson = new Gson();
         ArrayList<Message> data = new ArrayList<>();
+        Crypto crypto = new Crypto();
         idList = getIds();
         if(idList.size() == 0) {
             ErrorMessage errorMessage = new ErrorMessage("No users found.", 5);
@@ -43,8 +45,8 @@ public class AllServlet extends HttpServlet {
             for(String i : idList) {
                 String[] userInfo = new String[8];
                 userInfo = getInfo(i);
-                Message address = new Message(userInfo[5], userInfo[6], userInfo[4]);
-                Message message = new Message(userInfo[0], userInfo[1], userInfo[2], userInfo[3], userInfo[7], address);
+                Message address = new Message(new String(crypto.decrypt(userInfo[5].getBytes())), new String(crypto.decrypt(userInfo[6].getBytes())), new String(crypto.decrypt(userInfo[4].getBytes())));
+                Message message = new Message(userInfo[0], new String(crypto.decrypt(userInfo[1].getBytes())), new String(crypto.decrypt(userInfo[2].getBytes())), new String(crypto.decrypt(userInfo[3].getBytes())), new String(crypto.decrypt(userInfo[7].getBytes())), address);
                 data.add(message);
             }
             String jsonMessage = gson.toJson(data);

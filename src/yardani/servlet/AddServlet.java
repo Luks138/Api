@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import yardani.config.Config;
 import yardani.controller.NetworkController;
 import yardani.domain.ErrorMessage;
+import yardani.security.Crypto;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,13 +30,14 @@ public class AddServlet extends HttpServlet {
         String houseNum = req.getParameter("housenum");
         String email = req.getParameter("email");
         Gson gson = new Gson();
+        Crypto crypto = new Crypto();
         if(id == null || firstname == null || lastname == null || country == null || city == null || street == null || houseNum == null || email == null) {
             ErrorMessage errorMessage = new ErrorMessage("Id or other value not specified.", 1);
             String jsonMessage = gson.toJson(errorMessage);
             resp.getWriter().write(jsonMessage);
         } else {
             if(checkForId(id)) {
-                if(addUser(id, firstname, lastname, country, city, street, houseNum, email)) {
+                if(addUser(id, new String(crypto.encrypt(firstname.getBytes())), new String(crypto.encrypt(lastname.getBytes())), new String(crypto.encrypt(country.getBytes())), new String(crypto.encrypt(city.getBytes())), new String(crypto.encrypt(street.getBytes())), new String(crypto.encrypt(houseNum.getBytes())), new String(crypto.encrypt(email.getBytes())))) {
                     System.out.println("User added!");
                     resp.sendRedirect("/api?id=" + id);
                     return;
