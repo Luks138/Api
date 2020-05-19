@@ -41,25 +41,25 @@ public class EditServlet extends HttpServlet {
         Crypto crypto = new Crypto();
 
         if(firstname != null)
-            editUser(id, "firstname", new String(crypto.encrypt(firstname.getBytes())));
+            editUser(id, "firstname", new String(crypto.encrypt(firstname, Config.ENCRYPT_KEY)));
 
         if(lastname != null)
-            editUser(id, "lastname", new String(crypto.encrypt(lastname.getBytes())));
+            editUser(id, "lastname", new String(crypto.encrypt(lastname, Config.ENCRYPT_KEY)));
 
         if(country != null)
-            editUser(id, "country", new String(crypto.encrypt(country.getBytes())));
+            editUser(id, "country", new String(crypto.encrypt(country, Config.ENCRYPT_KEY)));
 
         if(city != null)
-            editUser(id, "city", new String(crypto.encrypt(city.getBytes())));
+            editUser(id, "city", new String(crypto.encrypt(city, Config.ENCRYPT_KEY)));
 
         if(street != null)
-            editUser(id, "street", new String(crypto.encrypt(street.getBytes())));
+            editUser(id, "street", new String(crypto.encrypt(street, Config.ENCRYPT_KEY)));
 
         if(houseNum != null)
-            editUser(id, "housenum", new String(crypto.encrypt(houseNum.getBytes())));
+            editUser(id, "housenum", new String(crypto.encrypt(houseNum, Config.ENCRYPT_KEY)));
 
         if(email != null)
-            editUser(id, "email", new String(crypto.encrypt(email.getBytes())));
+            editUser(id, "email", new String(crypto.encrypt(houseNum, Config.ENCRYPT_KEY)));
 
         resp.sendRedirect("/api");
         return;
@@ -74,7 +74,7 @@ public class EditServlet extends HttpServlet {
         try {
             statement = networkController.getConnection().createStatement();
             statement.executeUpdate(query);
-            System.out.println("User updated!");
+            System.out.println("Updated " + param + "of user with id " + id);
         } catch(SQLException e) {
             System.out.println("Can't update user!");
         } finally {

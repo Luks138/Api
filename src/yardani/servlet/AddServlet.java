@@ -37,7 +37,7 @@ public class AddServlet extends HttpServlet {
             resp.getWriter().write(jsonMessage);
         } else {
             if(checkForId(id)) {
-                if(addUser(id, new String(crypto.encrypt(firstname.getBytes())), new String(crypto.encrypt(lastname.getBytes())), new String(crypto.encrypt(country.getBytes())), new String(crypto.encrypt(city.getBytes())), new String(crypto.encrypt(street.getBytes())), new String(crypto.encrypt(houseNum.getBytes())), new String(crypto.encrypt(email.getBytes())))) {
+                if(addUser(id, new String(crypto.encrypt(firstname, Config.ENCRYPT_KEY)), new String(crypto.encrypt(lastname, Config.ENCRYPT_KEY)), new String(crypto.encrypt(country, Config.ENCRYPT_KEY)), new String(crypto.encrypt(city, Config.ENCRYPT_KEY)), new String(crypto.encrypt(street, Config.ENCRYPT_KEY)), new String(crypto.encrypt(houseNum, Config.ENCRYPT_KEY)), new String(crypto.encrypt(email, Config.ENCRYPT_KEY)))) {
                     System.out.println("User added!");
                     resp.sendRedirect("/api?id=" + id);
                     return;

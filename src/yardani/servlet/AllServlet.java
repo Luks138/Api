@@ -45,8 +45,8 @@ public class AllServlet extends HttpServlet {
             for(String i : idList) {
                 String[] userInfo = new String[8];
                 userInfo = getInfo(i);
-                Message address = new Message(new String(crypto.decrypt(userInfo[5].getBytes())), new String(crypto.decrypt(userInfo[6].getBytes())), new String(crypto.decrypt(userInfo[4].getBytes())));
-                Message message = new Message(userInfo[0], new String(crypto.decrypt(userInfo[1].getBytes())), new String(crypto.decrypt(userInfo[2].getBytes())), new String(crypto.decrypt(userInfo[3].getBytes())), new String(crypto.decrypt(userInfo[7].getBytes())), address);
+                Message address = new Message(new String(crypto.decrypt(userInfo[5], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[6], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[4], Config.ENCRYPT_KEY)));
+                Message message = new Message(userInfo[0], new String(crypto.decrypt(userInfo[1], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[2], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[3], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[7], Config.ENCRYPT_KEY)), address);
                 data.add(message);
             }
             String jsonMessage = gson.toJson(data);

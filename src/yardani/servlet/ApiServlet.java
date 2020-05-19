@@ -36,8 +36,8 @@ public class ApiServlet extends HttpServlet {
         String id = req.getParameter("id");
         if(id != null) {
             if(getInfo(id)) {
-                Message address = new Message(new String(crypto.decrypt(street.getBytes())), new String(crypto.decrypt(houseNum.getBytes())), new String(crypto.decrypt(city.getBytes())));
-                Message message = new Message(this.id, new String(crypto.decrypt(firstName.getBytes())), new String(crypto.decrypt(lastName.getBytes())), new String(crypto.decrypt(country.getBytes())), new String(crypto.decrypt(email.getBytes())), address);
+                Message address = new Message(new String(crypto.decrypt(street, Config.ENCRYPT_KEY)), new String(crypto.decrypt(houseNum, Config.ENCRYPT_KEY)), new String(crypto.decrypt(city, Config.ENCRYPT_KEY)));
+                Message message = new Message(this.id, new String(crypto.decrypt(firstName, Config.ENCRYPT_KEY)), new String(crypto.decrypt(lastName, Config.ENCRYPT_KEY)), new String(crypto.decrypt(country, Config.ENCRYPT_KEY)), new String(crypto.decrypt(email, Config.ENCRYPT_KEY)), address);
                 String jsonMessage = gson.toJson(message);
                 resp.getWriter().write(jsonMessage);
             } else {
