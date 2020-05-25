@@ -24,9 +24,7 @@ public class EnableAccessServlet extends HttpServlet {
             }
         } else {
             Gson gson = new Gson();
-            ErrorMessage errorMessage = new ErrorMessage("Token not specified.", 1);
-            String jsonMessage = gson.toJson(errorMessage);
-            resp.getWriter().write(jsonMessage);
+            resp.getWriter().write(gson.toJson(new ErrorMessage("Token not specified.", 1)));
         }
     }
 }

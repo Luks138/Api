@@ -33,9 +33,7 @@ public class RegisterUserServlet extends HttpServlet {
             }
         } else {
             Gson gson = new Gson();
-            ErrorMessage errorMessage = new ErrorMessage("Id or other value not specified.", 1);
-            String jsonMessage = gson.toJson(errorMessage);
-            resp.getWriter().write(jsonMessage);
+            resp.getWriter().write(gson.toJson(new ErrorMessage("Id or other value not specified.", 1)));
         }
     }
 

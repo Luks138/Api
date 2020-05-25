@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 @WebServlet("/token")
-public class GetToken extends HttpServlet {
+public class GetTokenServlet extends HttpServlet {
 
     private int access;
     private String token;
