@@ -5,6 +5,7 @@ import yardani.config.Config;
 import yardani.controller.NetworkController;
 import yardani.domain.ErrorMessage;
 import yardani.security.Crypto;
+import yardani.security.HasTokenAccess;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +23,7 @@ public class EditServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
+        String token = req.getParameter("token");
         String firstname = req.getParameter("firstname");
         String lastname = req.getParameter("lastname");
         String country = req.getParameter("country");
@@ -29,40 +31,41 @@ public class EditServlet extends HttpServlet {
         String street = req.getParameter("street");
         String houseNum = req.getParameter("housenum");
         String email = req.getParameter("email");
+        Gson gson = new Gson();
 
-        if(id == null || (firstname == null && lastname == null && country == null && city == null && street == null && houseNum == null && email == null)) {
-            Gson gson = new Gson();
-            ErrorMessage errorMessage = new ErrorMessage("Id or other value not specified.", 1);
-            String jsonMessage = gson.toJson(errorMessage);
-            resp.getWriter().write(jsonMessage);
+        if(id == null || token == null || (firstname == null && lastname == null && country == null && city == null && street == null && houseNum == null && email == null)) {
+            resp.getWriter().write(gson.toJson(new ErrorMessage("Id or other value not specified.", 1)));
             return;
         }
+        if(new HasTokenAccess().hasAccess(token)) {
+            Crypto crypto = new Crypto();
 
-        Crypto crypto = new Crypto();
+            if(firstname != null)
+                editUser(id, "firstname", new String(crypto.encrypt(firstname, Config.ENCRYPT_KEY)));
 
-        if(firstname != null)
-            editUser(id, "firstname", new String(crypto.encrypt(firstname, Config.ENCRYPT_KEY)));
+            if(lastname != null)
+                editUser(id, "lastname", new String(crypto.encrypt(lastname, Config.ENCRYPT_KEY)));
 
-        if(lastname != null)
-            editUser(id, "lastname", new String(crypto.encrypt(lastname, Config.ENCRYPT_KEY)));
+            if(country != null)
+                editUser(id, "country", new String(crypto.encrypt(country, Config.ENCRYPT_KEY)));
 
-        if(country != null)
-            editUser(id, "country", new String(crypto.encrypt(country, Config.ENCRYPT_KEY)));
+            if(city != null)
+                editUser(id, "city", new String(crypto.encrypt(city, Config.ENCRYPT_KEY)));
 
-        if(city != null)
-            editUser(id, "city", new String(crypto.encrypt(city, Config.ENCRYPT_KEY)));
+            if(street != null)
+                editUser(id, "street", new String(crypto.encrypt(street, Config.ENCRYPT_KEY)));
 
-        if(street != null)
-            editUser(id, "street", new String(crypto.encrypt(street, Config.ENCRYPT_KEY)));
+            if(houseNum != null)
+                editUser(id, "housenum", new String(crypto.encrypt(houseNum, Config.ENCRYPT_KEY)));
 
-        if(houseNum != null)
-            editUser(id, "housenum", new String(crypto.encrypt(houseNum, Config.ENCRYPT_KEY)));
+            if(email != null)
+                editUser(id, "email", new String(crypto.encrypt(houseNum, Config.ENCRYPT_KEY)));
 
-        if(email != null)
-            editUser(id, "email", new String(crypto.encrypt(houseNum, Config.ENCRYPT_KEY)));
-
-        resp.sendRedirect("/api");
-        return;
+            resp.sendRedirect("/api");
+            return;
+        } else {
+            resp.getWriter().write(gson.toJson(new ErrorMessage("Token doesn't have access!", 7)));
+        }
     }
 
     private void editUser(String id, String param, String value) {

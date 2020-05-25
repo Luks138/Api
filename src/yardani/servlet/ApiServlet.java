@@ -6,6 +6,7 @@ import yardani.controller.NetworkController;
 import yardani.domain.ErrorMessage;
 import yardani.domain.Message;
 import yardani.security.Crypto;
+import yardani.security.HasTokenAccess;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,16 +35,21 @@ public class ApiServlet extends HttpServlet {
         Gson gson = new Gson();
         Crypto crypto = new Crypto();
         String id = req.getParameter("id");
-        if(id != null) {
-            if(getInfo(id)) {
-                Message address = new Message(new String(crypto.decrypt(street, Config.ENCRYPT_KEY)), new String(crypto.decrypt(houseNum, Config.ENCRYPT_KEY)), new String(crypto.decrypt(city, Config.ENCRYPT_KEY)));
-                Message message = new Message(this.id, new String(crypto.decrypt(firstName, Config.ENCRYPT_KEY)), new String(crypto.decrypt(lastName, Config.ENCRYPT_KEY)), new String(crypto.decrypt(country, Config.ENCRYPT_KEY)), new String(crypto.decrypt(email, Config.ENCRYPT_KEY)), address);
-                String jsonMessage = gson.toJson(message);
-                resp.getWriter().write(jsonMessage);
+        String token = req.getParameter("token");
+        if(token != null) {
+            if(new HasTokenAccess().hasAccess(token)) {
+                if(id != null) {
+                    if(getInfo(id)) {
+                        Message address = new Message(new String(crypto.decrypt(street, Config.ENCRYPT_KEY)), new String(crypto.decrypt(houseNum, Config.ENCRYPT_KEY)), new String(crypto.decrypt(city, Config.ENCRYPT_KEY)));
+                        Message message = new Message(this.id, new String(crypto.decrypt(firstName, Config.ENCRYPT_KEY)), new String(crypto.decrypt(lastName, Config.ENCRYPT_KEY)), new String(crypto.decrypt(country, Config.ENCRYPT_KEY)), new String(crypto.decrypt(email, Config.ENCRYPT_KEY)), address);
+                        String jsonMessage = gson.toJson(message);
+                        resp.getWriter().write(jsonMessage);
+                    } else {
+                        resp.getWriter().write(gson.toJson(new ErrorMessage("User doesn't exist.", 4)));
+                    }
+                }
             } else {
-                ErrorMessage errorMessage = new ErrorMessage("User doesn't exist.", 4);
-                String jsonMessage = gson.toJson(errorMessage);
-                resp.getWriter().write(jsonMessage);
+                resp.getWriter().write(gson.toJson(new ErrorMessage("Token doesn't have access!", 7)));
             }
         }
     }

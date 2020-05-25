@@ -41,6 +41,30 @@
                         <span class="endpoint get"></span>
                     </a>
                 </li>
+                <li>
+                    <a href="#register">
+                        /register
+                        <span class="endpoint get"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#enable">
+                        /enable
+                        <span class="endpoint get"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#disable">
+                        /disable
+                        <span class="endpoint get"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#token">
+                        /token
+                        <span class="endpoint get"></span>
+                    </a>
+                </li>
             </ul>
         </section>
     </div>
@@ -95,6 +119,14 @@
                     <td>6</td>
                     <td>User wasn't deleted.</td>
                 </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Token doesn't have access!</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Incorrect username or password.</td>
+                </tr>
                 </tbody>
             </table>
         </section>
@@ -125,6 +157,10 @@
             <dl>
                 <dt>id</dt>
                 <dd>Just enter id.</dd>
+            </dl>
+            <dl>
+                <dt>Token</dt>
+                <dd>Just enter token.</dd>
             </dl>
             <p>Returns infomation about user with id.</p>
         </section>
@@ -160,6 +196,10 @@
             <dl>
                 <dt>id</dt>
                 <dd>Just enter id.</dd>
+            </dl>
+            <dl>
+                <dt>Token</dt>
+                <dd>Just enter token.</dd>
             </dl>
             <dl>
                 <dt>firstname</dt>
@@ -205,6 +245,10 @@
                 <dt>id</dt>
                 <dd>Just enter id.</dd>
             </dl>
+            <dl>
+                <dt>Token</dt>
+                <dd>Just enter token.</dd>
+            </dl>
             <p>Returns infomation about all users.</p>
         </section>
         <section class="right-code">
@@ -249,6 +293,10 @@
                 <dd>Just enter id.</dd>
             </dl>
             <dl>
+                <dt>Token</dt>
+                <dd>Just enter token.</dd>
+            </dl>
+            <dl>
                 <p>Removes user from DB</p>
         </section>
         <section class="left-docs">
@@ -260,6 +308,14 @@
             </h3>
             <p class="description">Edit user in DB</p>
             <h6>Parameters</h6>
+            <dl>
+                <dt>Id</dt>
+                <dd>Just enter id.</dd>
+            </dl>
+            <dl>
+                <dt>Token</dt>
+                <dd>Just enter token.</dd>
+            </dl>
             <dl>
                 <dt>firstname</dt>
                 <dd>Just enter first name.</dd>
@@ -291,6 +347,75 @@
             <dl>
                 <p>Just list the parameters</p>
                 <p>Edits user in DB</p>
+        </section>
+        <section class="left-docs">
+            <h3>
+                <a id="register">
+                    /register
+                    <span class="endpoint get"></span>
+                </a>
+            </h3>
+            <p class="description">Registers new user</p>
+            <h6>Parameters</h6>
+            <dl>
+                <dt>Username</dt>
+                <dd>Just enter username.</dd>
+            </dl>
+            <dl>
+                <dt>Password</dt>
+                <dd>Just enter password.</dd>
+            </dl>
+            <dl>
+                <p>Registers user to DB</p>
+        </section>
+        <section class="left-docs">
+            <h3>
+                <a id="enable">
+                    /enable
+                    <span class="endpoint get"></span>
+                </a>
+            </h3>
+            <p class="description">"Activates" token</p>
+            <h6>Parameters</h6>
+            <dl>
+                <dt>Token</dt>
+                <dd>Just enter token.</dd>
+            </dl>
+                <p>"Activates" token</p>
+        </section>
+        <section class="left-docs">
+            <h3>
+                <a id="disable">
+                    /disable
+                    <span class="endpoint get"></span>
+                </a>
+            </h3>
+            <p class="description">"Deactivates" token</p>
+            <h6>Parameters</h6>
+            <dl>
+                <dt>Token</dt>
+                <dd>Just enter token.</dd>
+            </dl>
+            <p>"Deactivates" token</p>
+        </section>
+        <section class="left-docs">
+            <h3>
+                <a id="token">
+                    /token
+                    <span class="endpoint get"></span>
+                </a>
+            </h3>
+            <p class="description">Shows token and activation status of token</p>
+            <h6>Parameters</h6>
+            <dl>
+                <dt>Username</dt>
+                <dd>Just enter username.</dd>
+            </dl>
+            <dl>
+                <dt>Password</dt>
+                <dd>Just enter password.</dd>
+            </dl>
+            <p>Shows token and activation status of token</p>
         </section>
     </section>
 </div>

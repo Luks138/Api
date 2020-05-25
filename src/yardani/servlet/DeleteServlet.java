@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import yardani.config.Config;
 import yardani.controller.NetworkController;
 import yardani.domain.ErrorMessage;
+import yardani.security.HasTokenAccess;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,20 +22,21 @@ public class DeleteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
+        String token = req.getParameter("token");
         Gson gson = new Gson();
-        if(id != null) {
-            if(deleteUser(id)) {
-                resp.sendRedirect("/api");
-                return;
+        if(id != null && token != null) {
+            if(new HasTokenAccess().hasAccess(token)) {
+                if(deleteUser(id)) {
+                    resp.sendRedirect("/api");
+                    return;
+                } else {
+                    resp.getWriter().write(gson.toJson(new ErrorMessage("User wasn't deleted.", 6)));
+                }
             } else {
-                ErrorMessage errorMessage = new ErrorMessage("User wasn't deleted.", 6);
-                String jsonMessage = gson.toJson(errorMessage);
-                resp.getWriter().write(jsonMessage);
+                resp.getWriter().write(gson.toJson(new ErrorMessage("Token doesn't have access!", 7)));
             }
         } else {
-            ErrorMessage errorMessage = new ErrorMessage("Id not specified.", 1);
-            String jsonMessage = gson.toJson(errorMessage);
-            resp.getWriter().write(jsonMessage);
+            resp.getWriter().write(gson.toJson(new ErrorMessage("Id or token not specified.", 1)));
         }
     }
 

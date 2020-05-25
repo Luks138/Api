@@ -10,6 +10,7 @@ public class Message {
     private String street;
     private String houseNum;
     private String email;
+
     private Message address;
 
     public Message(String id, String firstName, String lastName, String country, String email, Message address) {

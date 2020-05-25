@@ -5,6 +5,7 @@ import yardani.config.Config;
 import yardani.controller.NetworkController;
 import yardani.domain.ErrorMessage;
 import yardani.security.Crypto;
+import yardani.security.HasTokenAccess;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +23,7 @@ public class AddServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
+        String token = req.getParameter("token");
         String firstname = req.getParameter("firstname");
         String lastname = req.getParameter("lastname");
         String country = req.getParameter("country");
@@ -31,21 +33,21 @@ public class AddServlet extends HttpServlet {
         String email = req.getParameter("email");
         Gson gson = new Gson();
         Crypto crypto = new Crypto();
-        if(id == null || firstname == null || lastname == null || country == null || city == null || street == null || houseNum == null || email == null) {
-            ErrorMessage errorMessage = new ErrorMessage("Id or other value not specified.", 1);
-            String jsonMessage = gson.toJson(errorMessage);
-            resp.getWriter().write(jsonMessage);
+        if(id == null || token == null || firstname == null || lastname == null || country == null || city == null || street == null || houseNum == null || email == null) {
+            resp.getWriter().write(gson.toJson(new ErrorMessage("Id or other value not specified.", 1)));
         } else {
-            if(checkForId(id)) {
-                if(addUser(id, new String(crypto.encrypt(firstname, Config.ENCRYPT_KEY)), new String(crypto.encrypt(lastname, Config.ENCRYPT_KEY)), new String(crypto.encrypt(country, Config.ENCRYPT_KEY)), new String(crypto.encrypt(city, Config.ENCRYPT_KEY)), new String(crypto.encrypt(street, Config.ENCRYPT_KEY)), new String(crypto.encrypt(houseNum, Config.ENCRYPT_KEY)), new String(crypto.encrypt(email, Config.ENCRYPT_KEY)))) {
-                    System.out.println("User added!");
-                    resp.sendRedirect("/api?id=" + id);
-                    return;
+            if(new HasTokenAccess().hasAccess(token)) {
+                if(checkForId(id)) {
+                    if(addUser(id, new String(crypto.encrypt(firstname, Config.ENCRYPT_KEY)), new String(crypto.encrypt(lastname, Config.ENCRYPT_KEY)), new String(crypto.encrypt(country, Config.ENCRYPT_KEY)), new String(crypto.encrypt(city, Config.ENCRYPT_KEY)), new String(crypto.encrypt(street, Config.ENCRYPT_KEY)), new String(crypto.encrypt(houseNum, Config.ENCRYPT_KEY)), new String(crypto.encrypt(email, Config.ENCRYPT_KEY)))) {
+                        System.out.println("User added!");
+                        resp.sendRedirect("/api?id=" + id);
+                        return;
+                    }
+                } else {
+                    resp.getWriter().write((gson.toJson(new ErrorMessage("Id is already in use.", 2))));
                 }
             } else {
-                ErrorMessage errorMessage = new ErrorMessage("Id is already in use.", 2);
-                String jsonMessage = gson.toJson(errorMessage);
-                resp.getWriter().write(jsonMessage);
+                resp.getWriter().write(gson.toJson(new ErrorMessage("Token doesn't have access!", 7)));
             }
         }
     }

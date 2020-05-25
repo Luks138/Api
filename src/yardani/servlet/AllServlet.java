@@ -6,6 +6,7 @@ import yardani.controller.NetworkController;
 import yardani.domain.ErrorMessage;
 import yardani.domain.Message;
 import yardani.security.Crypto;
+import yardani.security.HasTokenAccess;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,25 +33,32 @@ public class AllServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ArrayList<String> idList = new ArrayList<>();
+        ArrayList<String> idList;
+		ArrayList<Message> data = new ArrayList<>();
         Gson gson = new Gson();
-        ArrayList<Message> data = new ArrayList<>();
         Crypto crypto = new Crypto();
-        idList = getIds();
-        if(idList.size() == 0) {
-            ErrorMessage errorMessage = new ErrorMessage("No users found.", 5);
-            String jsonMessage = gson.toJson(errorMessage);
-            resp.getWriter().write(jsonMessage);
-        } else {
-            for(String i : idList) {
-                String[] userInfo = new String[8];
-                userInfo = getInfo(i);
-                Message address = new Message(new String(crypto.decrypt(userInfo[5], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[6], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[4], Config.ENCRYPT_KEY)));
-                Message message = new Message(userInfo[0], new String(crypto.decrypt(userInfo[1], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[2], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[3], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[7], Config.ENCRYPT_KEY)), address);
-                data.add(message);
+        String token = req.getParameter("token");
+        if(token != null) {
+            if(new HasTokenAccess().hasAccess(token)) {
+                idList = getIds();
+                if(idList.size() == 0) {
+                    resp.getWriter().write(gson.toJson(new ErrorMessage("No users found.", 5)));
+                } else {
+                    for(String i : idList) {
+                        String[] userInfo;
+                        userInfo = getInfo(i);
+                        Message address = new Message(new String(crypto.decrypt(userInfo[5], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[6], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[4], Config.ENCRYPT_KEY)));
+                        Message message = new Message(userInfo[0], new String(crypto.decrypt(userInfo[1], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[2], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[3], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[7], Config.ENCRYPT_KEY)), address);
+                        data.add(message);
+                    }
+                    String jsonMessage = gson.toJson(data);
+                    resp.getWriter().write(jsonMessage);
+                }
+            } else {
+                resp.getWriter().write(gson.toJson(new ErrorMessage("Token doesn't have access!", 7)));
             }
-            String jsonMessage = gson.toJson(data);
-            resp.getWriter().write(jsonMessage);
+        } else {
+            resp.getWriter().write(gson.toJson(new ErrorMessage("Token not specified.", 1)));
         }
     }
 
