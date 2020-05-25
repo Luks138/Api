@@ -130,15 +130,12 @@
                 </tbody>
             </table>
         </section>
-
-
         <section class="right-code">
             <p style="color: white">Example</p>
             <div title="Error form" class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"errorMessage"</span><span class="p">:</span><span class="w"> </span><span class="mi"><span class="s2">"Id not specified."</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span>
-    <span class="w">
+    </span><span class="nl">"errorMessage"</span><span class="p">:</span><span class="w"> </span><span class="mi"><span class="s2">"Error code"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div></div>
@@ -416,6 +413,16 @@
                 <dd>Just enter password.</dd>
             </dl>
             <p>Shows token and activation status of token</p>
+        </section>
+        <section class="right-code">
+            <p style="color: white">Example</p>
+            <div title="Error form" class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"access"</span><span class="p">:</span><span class="w"> </span><span class="mi"><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"token"</span><span class="p">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
         </section>
     </section>
 </div>
