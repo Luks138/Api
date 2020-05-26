@@ -75,9 +75,10 @@
         <section class="left-docs">
             <h3>
                 <a>
-                    Documentation
+                    Documentation<br>
                 </a>
             </h3>
+            <h4>Before use API register yourself as new user to get access-token using <a href="#register">/register</a> method</h4>
         </section>
     </section>
     <section class="doc-content" id="index-page">
@@ -161,7 +162,6 @@
             </dl>
             <p>Returns infomation about user with id.</p>
         </section>
-
 
         <section class="right-code">
             <p style="color: white">Example</p>

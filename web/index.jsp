@@ -13,7 +13,7 @@
       <h1>REST-API PROJECT</h1>
       <h3>Welcome</h3>
       <p>This is my first simple rest-api project</p>
-      <p>Use API on this address -> <a href="/api">Click</a><p>
+      <p>Before using API read the docs -> <a href="/docs.jsp">Click</a><p>
       <h4>Links:</h4>
       <p><a href="/api">Use API</a></p>
       <p><a href="/docs.jsp">Documentation</a></p>
