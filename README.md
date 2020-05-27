@@ -1,7 +1,19 @@
 # Api
 My first simple rest-api project
 
-**Before use API _read the documentation_ and create 2 tables in your DB**
+**Before use API _read the documentation_, create 2 tables in your DB and edit config file (src/yardani/config/Config.java)**
+
+```
+package yardani.config;
+
+public class Config {
+    public static final String DB_URL = "jdbc:mysql://127.0.0.1:3307/api?serverTimezone=Europe/Moscow&useSSL=false";
+    public static final String DB_USER = "root";
+    public static final String DB_PASSWORD = "12345";
+
+    public static final String ENCRYPT_KEY = "MyKey";
+}
+```
 
 Queries (**Do not change names**):
 ```
