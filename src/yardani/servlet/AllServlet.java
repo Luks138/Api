@@ -34,7 +34,7 @@ public class AllServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ArrayList<String> idList;
-		ArrayList<Message> data = new ArrayList<>();
+        ArrayList<Message> data = new ArrayList<>();
         Gson gson = new Gson();
         Crypto crypto = new Crypto();
         String token = req.getParameter("token");

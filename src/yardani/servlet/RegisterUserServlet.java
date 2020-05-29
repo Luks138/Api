@@ -22,13 +22,13 @@ public class RegisterUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String idParam = req.getParameter("id");
-        int id = Integer.parseInt(idParam);
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        if(username != null && password != null) {
+        if(username != null && password != null && idParam != null) {
+            int id = Integer.parseInt(idParam);
             if(registerUser(id, username, password)) {
                 System.out.println("Success!");
-                resp.sendRedirect("/api");
+                resp.sendRedirect("/token?username=" + username + "&password=" + password);
                 return;
             }
         } else {
