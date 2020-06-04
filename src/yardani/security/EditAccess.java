@@ -9,8 +9,7 @@ import java.sql.Statement;
 
 public class EditAccess {
 
-    public boolean enable(String token) {
-        boolean isEnabled = false;
+    public void enable(String token) {
         NetworkController networkController = new NetworkController();
         Statement statement = null;
         ResultSet rs = null;
@@ -19,18 +18,15 @@ public class EditAccess {
         try {
             statement = networkController.getConnection().createStatement();
             statement.executeUpdate(query);
-            isEnabled = true;
             System.out.println("Access enabled!");
         } catch(SQLException e) {
             System.out.println("Can't enable access!");
         } finally {
             networkController.disconnect(statement, rs);
         }
-        return isEnabled;
     }
 
-    public boolean disable(String token) {
-        boolean isDisabled = false;
+    public void disable(String token) {
         NetworkController networkController = new NetworkController();
         Statement statement = null;
         ResultSet rs = null;
@@ -39,13 +35,11 @@ public class EditAccess {
         try {
             statement = networkController.getConnection().createStatement();
             statement.executeUpdate(query);
-            isDisabled = true;
             System.out.println("Access disabled!");
         } catch(SQLException e) {
             System.out.println("Can't disable access!");
         } finally {
             networkController.disconnect(statement, rs);
         }
-        return isDisabled;
     }
 }

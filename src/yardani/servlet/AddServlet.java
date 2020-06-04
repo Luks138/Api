@@ -38,11 +38,10 @@ public class AddServlet extends HttpServlet {
         } else {
             if(new HasTokenAccess().hasAccess(token)) {
                 if(checkForId(id)) {
-                    if(addUser(id, new String(crypto.encrypt(firstname, Config.ENCRYPT_KEY)), new String(crypto.encrypt(lastname, Config.ENCRYPT_KEY)), new String(crypto.encrypt(country, Config.ENCRYPT_KEY)), new String(crypto.encrypt(city, Config.ENCRYPT_KEY)), new String(crypto.encrypt(street, Config.ENCRYPT_KEY)), new String(crypto.encrypt(houseNum, Config.ENCRYPT_KEY)), new String(crypto.encrypt(email, Config.ENCRYPT_KEY)))) {
-                        System.out.println("User added!");
-                        resp.sendRedirect("/api?id=" + id);
-                        return;
-                    }
+                    addUser(id, new String(crypto.encrypt(firstname, Config.ENCRYPT_KEY)), new String(crypto.encrypt(lastname, Config.ENCRYPT_KEY)), new String(crypto.encrypt(country, Config.ENCRYPT_KEY)), new String(crypto.encrypt(city, Config.ENCRYPT_KEY)), new String(crypto.encrypt(street, Config.ENCRYPT_KEY)), new String(crypto.encrypt(houseNum, Config.ENCRYPT_KEY)), new String(crypto.encrypt(email, Config.ENCRYPT_KEY)));
+                    System.out.println("User added!");
+                    resp.sendRedirect("/api?id=" + id);
+                    return;
                 } else {
                     resp.getWriter().write((gson.toJson(new ErrorMessage("Id is already in use.", 2))));
                 }
@@ -76,22 +75,19 @@ public class AddServlet extends HttpServlet {
         return isChecked;
     }
 
-    private boolean addUser(String id, String firstname, String lastname, String country, String city, String street, String houseNum, String email) {
+    private void addUser(String id, String firstname, String lastname, String country, String city, String street, String houseNum, String email) {
         NetworkController networkController = new NetworkController();
         Statement statement = null;
         ResultSet rs = null;
-        boolean isAdded = false;
         networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         String query = "INSERT api_table(id, firstname, lastname, country, city, street, housenum, email) VALUES ('" + id + "','" + firstname + "','" + lastname + "','" + country + "'" + ",'" + city + "','" + street + "', '" + houseNum + "', '" + email + "');";
         try {
             statement = networkController.getConnection().createStatement();
             statement.executeUpdate(query);
-            isAdded = true;
         } catch (SQLException e) {
             System.out.println("Can't add user\n" + e);
         } finally {
             networkController.disconnect(statement, rs);
         }
-        return isAdded;
     }
 }

@@ -19,10 +19,9 @@ public class EnableAccessServlet extends HttpServlet {
         String token = req.getParameter("token");
         EditAccess editAccess = new EditAccess();
         if(token != null) {
-            if(editAccess.enable(token)) {
-                resp.sendRedirect("/api");
-                return;
-            }
+            editAccess.enable(token);
+            resp.sendRedirect("/api");
+            return;
         } else {
             Gson gson = new Gson();
             resp.getWriter().write(gson.toJson(new ErrorMessage("Token not specified.", 1)));

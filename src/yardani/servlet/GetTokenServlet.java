@@ -37,7 +37,7 @@ public class GetTokenServlet extends HttpServlet {
             }
         } else {
             Gson gson = new Gson();
-            resp.getWriter().write(gson.toJson(new ErrorMessage("Username or token not specified.", 1)));
+            resp.getWriter().write(gson.toJson(new ErrorMessage("Username or password not specified.", 1)));
         }
     }
 

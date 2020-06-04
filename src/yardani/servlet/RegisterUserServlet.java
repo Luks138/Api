@@ -26,19 +26,17 @@ public class RegisterUserServlet extends HttpServlet {
         String password = req.getParameter("password");
         if(username != null && password != null && idParam != null) {
             int id = Integer.parseInt(idParam);
-            if(registerUser(id, username, password)) {
-                System.out.println("Success!");
-                resp.sendRedirect("/token?username=" + username + "&password=" + password);
-                return;
-            }
+            registerUser(id, username, password);
+            System.out.println("User registered successfully!");
+            resp.sendRedirect("/token?username=" + username + "&password=" + password);
+            return;
         } else {
             Gson gson = new Gson();
             resp.getWriter().write(gson.toJson(new ErrorMessage("Id or other value not specified.", 1)));
         }
     }
 
-    private boolean registerUser(int id, String username, String password) {
-        boolean isReg = false;
+    private void registerUser(int id, String username, String password) {
         NetworkController networkController = new NetworkController();
         Statement statement = null;
         ResultSet rs = null;
@@ -49,13 +47,10 @@ public class RegisterUserServlet extends HttpServlet {
         try {
             statement = networkController.getConnection().createStatement();
             statement.executeUpdate(query);
-            isReg = true;
         } catch (SQLException e) {
             System.out.println("Can't register user\n" + e);
         } finally {
             networkController.disconnect(statement, rs);
         }
-
-        return isReg;
     }
 }
