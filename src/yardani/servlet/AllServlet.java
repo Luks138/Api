@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 @WebServlet("/all")
@@ -65,13 +65,13 @@ public class AllServlet extends HttpServlet {
     private ArrayList<String> getIds() {
         ArrayList<String> idList = new ArrayList<>();
         NetworkController networkController = new NetworkController();
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         String query = "SELECT id FROM api_table";
         try {
-            statement = networkController.getConnection().createStatement();
-            rs = statement.executeQuery(query);
+            statement = networkController.getConnection().prepareStatement(query);
+            rs = statement.executeQuery();
             while(rs.next()) {
                 idList.add(rs.getString("id"));
             }
@@ -85,14 +85,15 @@ public class AllServlet extends HttpServlet {
 
     private String[] getInfo(String id) {
         NetworkController networkController = new NetworkController();
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         String[] userInfo = new String[8];
         networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
-        String query = "SELECT * FROM api_table WHERE id = " + id;
+        String query = "SELECT * FROM api_table WHERE id = ?";
         try {
-            statement = networkController.getConnection().createStatement();
-            rs = statement.executeQuery(query);
+            statement = networkController.getConnection().prepareStatement(query);
+            statement.setString(1, id);
+            rs = statement.executeQuery();
             while(rs.next()){
                 this.id = rs.getString("id");
                 firstName = rs.getString("firstname");

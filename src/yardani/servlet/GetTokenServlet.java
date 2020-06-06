@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 @WebServlet("/token")
 public class GetTokenServlet extends HttpServlet {
@@ -44,14 +44,16 @@ public class GetTokenServlet extends HttpServlet {
     private boolean getToken(String username, String password) {
         boolean isGotten = false;
         NetworkController networkController = new NetworkController();
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         Crypto crypto = new Crypto();
-        String query = "SELECT * FROM users WHERE username = '" + new String(crypto.encrypt(username, Config.ENCRYPT_KEY)) + "' AND password = '" + new String(crypto.encrypt(password, Config.ENCRYPT_KEY)) + "'";
+        String query = "SELECT * FROM users WHERE username = ? AND password = ?";
         try {
-            statement = networkController.getConnection().createStatement();
-            rs = statement.executeQuery(query);
+            statement = networkController.getConnection().prepareStatement(query);
+            statement.setString(1, new String(crypto.encrypt(username, Config.ENCRYPT_KEY)));
+            statement.setString(2, new String(crypto.encrypt(password, Config.ENCRYPT_KEY)));
+            rs = statement.executeQuery();
             while(rs.next()){
                 access = rs.getInt("hasaccess");
                 token = rs.getString("token");

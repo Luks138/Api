@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 @WebServlet("/delete")
 public class DeleteServlet extends HttpServlet {
@@ -42,14 +42,15 @@ public class DeleteServlet extends HttpServlet {
 
     private boolean deleteUser(String id) {
         NetworkController networkController = new NetworkController();
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         boolean isDeleted = false;
         networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
-        String sql = "DELETE FROM api_table WHERE id = " + id;
+        String query = "DELETE FROM api_table WHERE id = ?";
         try {
-            statement = networkController.getConnection().createStatement();
-            statement.executeUpdate(sql);
+            statement = networkController.getConnection().prepareStatement(query);
+            statement.setString(1, id);
+            statement.executeUpdate();
             System.out.println("User deleted!");
             isDeleted = true;
         } catch (SQLException e) {

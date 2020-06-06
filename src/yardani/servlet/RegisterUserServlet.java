@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 @WebServlet("/register")
 public class RegisterUserServlet extends HttpServlet {
@@ -38,15 +38,18 @@ public class RegisterUserServlet extends HttpServlet {
 
     private void registerUser(int id, String username, String password) {
         NetworkController networkController = new NetworkController();
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         Crypto crypto = new Crypto();
-        String token = new String(crypto.encrypt((username+password), Config.ENCRYPT_KEY));
-        String query = "INSERT users(id, username, password, hasaccess, token) VALUES ("+ id +",'" + new String(crypto.encrypt(username, Config.ENCRYPT_KEY)) + "','" + new String(crypto.encrypt(password, Config.ENCRYPT_KEY)) + "'," + 0 + ",'" + token + "')";
+        String query = "INSERT users(id, username, password, hasaccess, token) VALUES (?, ?, ?, 0, ?)";
         try {
-            statement = networkController.getConnection().createStatement();
-            statement.executeUpdate(query);
+            statement = networkController.getConnection().prepareStatement(query);
+            statement.setInt(1, id);
+            statement.setString(2, new String(crypto.encrypt(username, Config.ENCRYPT_KEY)));
+            statement.setString(3, new String(crypto.encrypt(password, Config.ENCRYPT_KEY)));
+            statement.setString(4, new String(crypto.encrypt((username+password), Config.ENCRYPT_KEY)));
+            statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Can't register user\n" + e);
         } finally {

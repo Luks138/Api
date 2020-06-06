@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 @WebServlet("/edit")
 public class EditServlet extends HttpServlet {
@@ -70,13 +70,16 @@ public class EditServlet extends HttpServlet {
 
     private void editUser(String id, String param, String value) {
         NetworkController networkController = new NetworkController();
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
-        String query = "UPDATE api_table SET " + param + " = '" + value + "' WHERE id = " + id;
+        String query = "UPDATE api_table SET ? = ? WHERE id = ?";
         try {
-            statement = networkController.getConnection().createStatement();
-            statement.executeUpdate(query);
+            statement = networkController.getConnection().prepareStatement(query);
+            statement.setString(1, param);
+            statement.setString(2, value);
+            statement.setString(3, id);
+            statement.executeUpdate();
             System.out.println("Updated " + param + "of user with id " + id);
         } catch(SQLException e) {
             System.out.println("Can't update user!");

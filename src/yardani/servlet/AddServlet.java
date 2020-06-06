@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 @WebServlet("/add")
 public class AddServlet extends HttpServlet {
@@ -53,15 +53,16 @@ public class AddServlet extends HttpServlet {
 
     private boolean checkForId(String id) {
         NetworkController networkController = new NetworkController();
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         boolean isChecked = false;
         String idBd = null;
         networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
-        String query = "SELECT * FROM api_table WHERE id = " + id;
+        String query = "SELECT * FROM api_table WHERE id = ?";
         try {
-            statement = networkController.getConnection().createStatement();
-            rs = statement.executeQuery(query);
+            statement = networkController.getConnection().prepareStatement(query);
+            statement.setString(1, id);
+            rs = statement.executeQuery();
             while(rs.next()) {
                 idBd = rs.getString("id");
             }
@@ -77,13 +78,21 @@ public class AddServlet extends HttpServlet {
 
     private void addUser(String id, String firstname, String lastname, String country, String city, String street, String houseNum, String email) {
         NetworkController networkController = new NetworkController();
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
-        String query = "INSERT api_table(id, firstname, lastname, country, city, street, housenum, email) VALUES ('" + id + "','" + firstname + "','" + lastname + "','" + country + "'" + ",'" + city + "','" + street + "', '" + houseNum + "', '" + email + "');";
+        String query = "INSERT api_table(id, firstname, lastname, country, city, street, housenum, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
         try {
-            statement = networkController.getConnection().createStatement();
-            statement.executeUpdate(query);
+            statement = networkController.getConnection().prepareStatement(query);
+            statement.setString(1, id);
+            statement.setString(2, firstname);
+            statement.setString(3, lastname);
+            statement.setString(4, country);
+            statement.setString(5, city);
+            statement.setString(6, street);
+            statement.setString(7, houseNum);
+            statement.setString(8, email);
+            statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Can't add user\n" + e);
         } finally {

@@ -1,15 +1,11 @@
 package yardani.controller;
 
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class NetworkController {
 
     private Connection connection = null;
-    private Statement statement = null;
+    private PreparedStatement statement = null;
     private ResultSet resultSet = null;
 
     public Connection getConnection() {
@@ -26,7 +22,7 @@ public class NetworkController {
         }
     }
 
-    public void disconnect(Statement statement, ResultSet resultSet) {
+    public void disconnect(PreparedStatement statement, ResultSet resultSet) {
         try {
             if(statement != null)
                 statement.close();
