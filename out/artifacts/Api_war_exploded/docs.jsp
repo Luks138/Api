@@ -239,10 +239,6 @@
             <p class="description">Get all users</p>
             <h6>Parameters</h6>
             <dl>
-                <dt>id</dt>
-                <dd>Just enter id.</dd>
-            </dl>
-            <dl>
                 <dt>Token</dt>
                 <dd>Just enter token.</dd>
             </dl>
