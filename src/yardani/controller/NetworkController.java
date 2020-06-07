@@ -5,8 +5,6 @@ import java.sql.*;
 public class NetworkController {
 
     private Connection connection = null;
-    private PreparedStatement statement = null;
-    private ResultSet resultSet = null;
 
     public Connection getConnection() {
         return connection;
@@ -18,7 +16,6 @@ public class NetworkController {
             connection = DriverManager.getConnection(url, username, password);
         } catch(Exception e) {
             System.out.println("Connection failed...\n" + e);
-            disconnect(statement, resultSet);
         }
     }
 
