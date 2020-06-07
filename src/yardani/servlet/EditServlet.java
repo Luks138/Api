@@ -69,22 +69,23 @@ public class EditServlet extends HttpServlet {
     }
 
     private void editUser(String id, String param, String value) {
-        NetworkController networkController = new NetworkController();
+        NetworkController network = new NetworkController();
         PreparedStatement statement = null;
-        ResultSet rs = null;
-        networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+        network.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         String query = "UPDATE api_table SET ? = ? WHERE id = ?";
         try {
-            statement = networkController.getConnection().prepareStatement(query);
+            statement = network.getConnection().prepareStatement(query);
+
             statement.setString(1, param);
             statement.setString(2, value);
             statement.setString(3, id);
+
             statement.executeUpdate();
             System.out.println("Updated " + param + "of user with id " + id);
         } catch(SQLException e) {
             System.out.println("Can't update user!");
         } finally {
-            networkController.disconnect(statement, rs);
+            network.disconnect(statement, null);
         }
     }
 }

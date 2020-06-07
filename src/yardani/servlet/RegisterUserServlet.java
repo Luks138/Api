@@ -37,23 +37,24 @@ public class RegisterUserServlet extends HttpServlet {
     }
 
     private void registerUser(int id, String username, String password) {
-        NetworkController networkController = new NetworkController();
+        NetworkController network = new NetworkController();
         PreparedStatement statement = null;
-        ResultSet rs = null;
-        networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+        network.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         Crypto crypto = new Crypto();
         String query = "INSERT users(id, username, password, hasaccess, token) VALUES (?, ?, ?, 0, ?)";
         try {
-            statement = networkController.getConnection().prepareStatement(query);
+            statement = network.getConnection().prepareStatement(query);
+
             statement.setInt(1, id);
             statement.setString(2, new String(crypto.encrypt(username, Config.ENCRYPT_KEY)));
             statement.setString(3, new String(crypto.encrypt(password, Config.ENCRYPT_KEY)));
             statement.setString(4, new String(crypto.encrypt((username+password), Config.ENCRYPT_KEY)));
+
             statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Can't register user\n" + e);
         } finally {
-            networkController.disconnect(statement, rs);
+            network.disconnect(statement, null);
         }
     }
 }

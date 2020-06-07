@@ -43,26 +43,29 @@ public class GetTokenServlet extends HttpServlet {
 
     private boolean getToken(String username, String password) {
         boolean isGotten = false;
-        NetworkController networkController = new NetworkController();
+        NetworkController network = new NetworkController();
         PreparedStatement statement = null;
         ResultSet rs = null;
-        networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+        network.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         Crypto crypto = new Crypto();
         String query = "SELECT * FROM users WHERE username = ? AND password = ?";
         try {
-            statement = networkController.getConnection().prepareStatement(query);
+            statement = network.getConnection().prepareStatement(query);
+
             statement.setString(1, new String(crypto.encrypt(username, Config.ENCRYPT_KEY)));
             statement.setString(2, new String(crypto.encrypt(password, Config.ENCRYPT_KEY)));
+
             rs = statement.executeQuery();
             while(rs.next()){
                 access = rs.getInt("hasaccess");
                 token = rs.getString("token");
+
                 isGotten = true;
             }
         } catch (SQLException e) {
             System.out.println("Can't get token\n" + e);
         } finally {
-            networkController.disconnect(statement, rs);
+            network.disconnect(statement, rs);
         }
 
         return isGotten;

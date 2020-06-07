@@ -17,9 +17,8 @@ public class EnableAccessServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String token = req.getParameter("token");
-        EditAccess editAccess = new EditAccess();
         if(token != null) {
-            editAccess.enable(token);
+            new EditAccess().enable(token);
             resp.sendRedirect("/api");
             return;
         } else {

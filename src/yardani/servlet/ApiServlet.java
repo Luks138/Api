@@ -42,8 +42,7 @@ public class ApiServlet extends HttpServlet {
                     if(getInfo(id)) {
                         Message address = new Message(new String(crypto.decrypt(street, Config.ENCRYPT_KEY)), new String(crypto.decrypt(houseNum, Config.ENCRYPT_KEY)), new String(crypto.decrypt(city, Config.ENCRYPT_KEY)));
                         Message message = new Message(this.id, new String(crypto.decrypt(firstName, Config.ENCRYPT_KEY)), new String(crypto.decrypt(lastName, Config.ENCRYPT_KEY)), new String(crypto.decrypt(country, Config.ENCRYPT_KEY)), new String(crypto.decrypt(email, Config.ENCRYPT_KEY)), address);
-                        String jsonMessage = gson.toJson(message);
-                        resp.getWriter().write(jsonMessage);
+                        resp.getWriter().write(gson.toJson(message));
                     } else {
                         resp.getWriter().write(gson.toJson(new ErrorMessage("User doesn't exist.", 4)));
                     }
@@ -55,14 +54,14 @@ public class ApiServlet extends HttpServlet {
     }
 
     private boolean getInfo(String id) {
-        NetworkController networkController = new NetworkController();
+        NetworkController network = new NetworkController();
         PreparedStatement statement = null;
         ResultSet rs = null;
         boolean isGotten = false;
-        networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+        network.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         String query = "SELECT * FROM api_table WHERE id = ?";
         try {
-            statement = networkController.getConnection().prepareStatement(query);
+            statement = network.getConnection().prepareStatement(query);
             statement.setString(1, id);
             rs = statement.executeQuery();
             while(rs.next()){
@@ -75,14 +74,16 @@ public class ApiServlet extends HttpServlet {
                     street = rs.getString("street");
                     houseNum = rs.getString("housenum");
                     email = rs.getString("email");
+
                     isGotten = true;
                 }
             }
         } catch (SQLException e) {
             System.out.println("Can't get info\n" + e);
         } finally {
-            networkController.disconnect(statement, rs);
+            network.disconnect(statement, rs);
         }
+
         return isGotten;
     }
 }

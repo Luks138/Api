@@ -52,15 +52,15 @@ public class AddServlet extends HttpServlet {
     }
 
     private boolean checkForId(String id) {
-        NetworkController networkController = new NetworkController();
+        NetworkController network = new NetworkController();
         PreparedStatement statement = null;
         ResultSet rs = null;
         boolean isChecked = false;
         String idBd = null;
-        networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+        network.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         String query = "SELECT * FROM api_table WHERE id = ?";
         try {
-            statement = networkController.getConnection().prepareStatement(query);
+            statement = network.getConnection().prepareStatement(query);
             statement.setString(1, id);
             rs = statement.executeQuery();
             while(rs.next()) {
@@ -71,8 +71,9 @@ public class AddServlet extends HttpServlet {
         } catch (SQLException e) {
             System.out.println("Can't check user for id!\n" + e);
         } finally {
-            networkController.disconnect(statement, rs);
+            network.disconnect(statement, rs);
         }
+
         return isChecked;
     }
 
@@ -84,6 +85,7 @@ public class AddServlet extends HttpServlet {
         String query = "INSERT api_table(id, firstname, lastname, country, city, street, housenum, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
         try {
             statement = networkController.getConnection().prepareStatement(query);
+
             statement.setString(1, id);
             statement.setString(2, firstname);
             statement.setString(3, lastname);
@@ -92,6 +94,7 @@ public class AddServlet extends HttpServlet {
             statement.setString(6, street);
             statement.setString(7, houseNum);
             statement.setString(8, email);
+
             statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Can't add user\n" + e);

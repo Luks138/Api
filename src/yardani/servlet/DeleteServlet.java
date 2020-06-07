@@ -21,9 +21,9 @@ public class DeleteServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Gson gson = new Gson();
         String id = req.getParameter("id");
         String token = req.getParameter("token");
-        Gson gson = new Gson();
         if(id != null && token != null) {
             if(new HasTokenAccess().hasAccess(token)) {
                 if(deleteUser(id)) {
@@ -41,14 +41,13 @@ public class DeleteServlet extends HttpServlet {
     }
 
     private boolean deleteUser(String id) {
-        NetworkController networkController = new NetworkController();
+        NetworkController network = new NetworkController();
         PreparedStatement statement = null;
-        ResultSet rs = null;
         boolean isDeleted = false;
-        networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+        network.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         String query = "DELETE FROM api_table WHERE id = ?";
         try {
-            statement = networkController.getConnection().prepareStatement(query);
+            statement = network.getConnection().prepareStatement(query);
             statement.setString(1, id);
             statement.executeUpdate();
             System.out.println("User deleted!");
@@ -56,8 +55,9 @@ public class DeleteServlet extends HttpServlet {
         } catch (SQLException e) {
             System.out.println("Can't delete user...\n" + e);
         } finally {
-            networkController.disconnect(statement, rs);
+            network.disconnect(statement, null);
         }
+
         return isDeleted;
     }
 }

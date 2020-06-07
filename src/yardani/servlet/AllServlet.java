@@ -51,8 +51,7 @@ public class AllServlet extends HttpServlet {
                         Message message = new Message(userInfo[0], new String(crypto.decrypt(userInfo[1], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[2], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[3], Config.ENCRYPT_KEY)), new String(crypto.decrypt(userInfo[7], Config.ENCRYPT_KEY)), address);
                         data.add(message);
                     }
-                    String jsonMessage = gson.toJson(data);
-                    resp.getWriter().write(jsonMessage);
+                    resp.getWriter().write(gson.toJson(data));
                 }
             } else {
                 resp.getWriter().write(gson.toJson(new ErrorMessage("Token doesn't have access!", 7)));
@@ -64,13 +63,13 @@ public class AllServlet extends HttpServlet {
 
     private ArrayList<String> getIds() {
         ArrayList<String> idList = new ArrayList<>();
-        NetworkController networkController = new NetworkController();
+        NetworkController network = new NetworkController();
         PreparedStatement statement = null;
         ResultSet rs = null;
-        networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+        network.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         String query = "SELECT id FROM api_table";
         try {
-            statement = networkController.getConnection().prepareStatement(query);
+            statement = network.getConnection().prepareStatement(query);
             rs = statement.executeQuery();
             while(rs.next()) {
                 idList.add(rs.getString("id"));
@@ -78,20 +77,21 @@ public class AllServlet extends HttpServlet {
         } catch(SQLException e) {
             System.out.println("Can't get IDs from db\n" + e);
         } finally {
-            networkController.disconnect(statement, rs);
+            network.disconnect(statement, rs);
         }
+
         return idList;
     }
 
     private String[] getInfo(String id) {
-        NetworkController networkController = new NetworkController();
+        NetworkController network = new NetworkController();
         PreparedStatement statement = null;
         ResultSet rs = null;
         String[] userInfo = new String[8];
-        networkController.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+        network.connect(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
         String query = "SELECT * FROM api_table WHERE id = ?";
         try {
-            statement = networkController.getConnection().prepareStatement(query);
+            statement = network.getConnection().prepareStatement(query);
             statement.setString(1, id);
             rs = statement.executeQuery();
             while(rs.next()){
@@ -116,8 +116,9 @@ public class AllServlet extends HttpServlet {
         } catch (SQLException e) {
             System.out.println("Can't get info\n" + e);
         } finally {
-            networkController.disconnect(statement, rs);
+            network.disconnect(statement, rs);
         }
+
         return userInfo;
     }
 }
